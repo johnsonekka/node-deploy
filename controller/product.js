@@ -46,8 +46,15 @@ exports.createProduct = async (req, res) => {
 
 // Read
 exports.getAllProduct = async (req, res) => {
-  const products = await Product.find({});
-  res.json(products);
+  let query = Product.find();
+  console.log(req.query.sort);
+  if(req.query.sort) {
+    const products = await query.sort({[req.query.sort]:req.query.order}).limit(req.query.limit).exec();
+    res.json(products);
+  }else {
+    const products = await query.exec();
+    res.json(products);
+  }
 };
 
 exports.getProduct = async (req, res) => {
